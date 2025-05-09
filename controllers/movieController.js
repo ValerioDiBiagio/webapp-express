@@ -21,7 +21,10 @@ function index(req, res) {
             })
         }
 
-        res.json(results);
+        res.json(results.map(result => ({
+            ...result,
+            imagePath: process.env.PUBLIC_PATH + 'movies_cover/' + result.image
+        })));
     })
 }
 
