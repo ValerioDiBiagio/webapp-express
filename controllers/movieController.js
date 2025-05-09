@@ -1,10 +1,17 @@
-export function index(req, res) {
+const connection = require('../data/db.js');
+
+function index(req, res) {
     res.send('All movies');
 
 }
 
 
-export function show(req, res) {
+function show(req, res) {
     res.send('Single movies');
 
+}
+
+module.exports = {
+    index,
+    show
 }
