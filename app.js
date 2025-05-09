@@ -7,6 +7,10 @@ const moviesRouter = require('./routers/movies');
 const notFound = require('./middlewares/notFound');
 const errorsHandler = require('./middlewares/handleErrors');
 
+app.use(express.static('public'));
+
+app.use(express.json());
+
 app.get('/', (req, res) => {
     res.send('Homepage');
 })
