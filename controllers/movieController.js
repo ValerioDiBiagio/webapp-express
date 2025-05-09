@@ -48,8 +48,13 @@ function show(req, res) {
             })
         }
 
-        const movie = results[0];
+        const currentResult = results[0];
 
+        const movie = {
+            ...currentResult,
+            imagePath: process.env.PUBLIC_PATH + 'movies_cover/' + currentResult.image
+
+        }
         const sql = 'SELECT * FROM db_movies.reviews WHERE movie_id = ?';
 
         connection.query(sql, [id], (err, results) => {
