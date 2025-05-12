@@ -3,7 +3,7 @@ function errorsHandler(err, _, res) {
 
     res.json({
         errorStatus: 500,
-        errorMessage: err.mesage
+        errorMessage: err.message
     })
 }
 
