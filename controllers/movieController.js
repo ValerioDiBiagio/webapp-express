@@ -5,6 +5,7 @@ function index(req, res) {
     const { search } = req.query
 
     //    const sql = 'SELECT * FROM movies;'
+    let preparedParams = [];
 
     let sql =
         `SELECT 
@@ -16,14 +17,15 @@ function index(req, res) {
     `
 
     if (search) {
-        sql += `WHERE title LIKE "%${search}%" OR director LIKE "%${search}%" OR abstract LIKE "%${search}%"`
+        sql += `WHERE title LIKE ? OR director LIKE ? OR abstract LIKE ?`
+        preparedParams.push(`%${search}%`, `%${search}%`, `%${search}%`)
     }
 
 
     sql += `GROUP BY
       movies.id`
 
-    connection.query(sql, (err, results) => {
+    connection.query(sql, preparedParams, (err, results) => {
         if (err) {
             return res.status(500).json({
                 errorMessage: 'Database connection error'
