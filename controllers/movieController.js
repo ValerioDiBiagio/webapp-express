@@ -5,7 +5,7 @@ function index(req, res) {
     const { search } = req.query
 
     //    const sql = 'SELECT * FROM movies;'
-    let preparedParams = [];
+    const preparedParams = [];
 
     let sql =
         `SELECT 
@@ -44,7 +44,15 @@ function show(req, res) {
 
     const { id } = req.params
 
-    const sql = 'SELECT * FROM movies WHERE id = ?;'
+    const sql = `SELECT 
+      movies.*, ROUND(AVG(reviews.vote), 2) AS average_reviews
+   FROM
+      movies
+    LEFT JOIN
+      reviews ON movies.id = reviews.movie_id
+    WHERE
+      movies.id = ?
+    `
 
     connection.query(sql, [id], (err, results) => {
         if (err) {
