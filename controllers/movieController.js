@@ -28,7 +28,7 @@ function index(req, res) {
     connection.query(sql, preparedParams, (err, results) => {
         if (err) {
             return res.status(500).json({
-                errorMessage: 'Database connection error'
+                errorMessage: err.sqlMessage
             })
         }
 
@@ -57,7 +57,7 @@ function show(req, res) {
     connection.query(sql, [id], (err, results) => {
         if (err) {
             return res.status(500).json({
-                errorMessage: 'Database connection error'
+                errorMessage: err.sqlMessage
             })
         }
         if (results.length === 0) {
@@ -93,9 +93,27 @@ function storeReview(req, res) {
 
     const { id } = req.params;
 
-    console.log(req.body);
+    const { name, vote, text } = req.body
 
-    res.send(`Ho aggiunto una nuova recensione per il libro ${id}`);
+    const sql = `
+    INSERT INTO reviews (movie_id, name, vote, text)
+    VALUES (?, ?, ?, ?)`;
+
+    connection.query(sql, [id, name, vote, text], (err, results) => {
+        if (err) {
+            return res.status(500).json({
+                errorMessage: err.sqlMessage
+            })
+        }
+
+        res.status(201);
+        res.json({
+            id,
+            name,
+            vote,
+            text
+        })
+    })
 }
 
 module.exports = {
