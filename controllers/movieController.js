@@ -116,8 +116,35 @@ function storeReview(req, res) {
     })
 }
 
+function store(req, res) {
+
+    const { title, director, abstract } = req.body
+
+    const imgName = req.file.filename;
+
+    const sql = `
+    INSERT INTO movies (title, director, abstract, image)
+    VALUES (?, ?, ?, ?)`;
+
+    connection.query(sql, [title, director, abstract, imgName], (err, results) => {
+        if (err) {
+            return res.status(500).json({
+                errorMessage: err.sqlMessage
+            })
+        }
+
+        res.status(201);
+        res.json({
+            message: 'Nuovo film aggiunto'
+        })
+    })
+}
+
+
+
 module.exports = {
     index,
     show,
+    store,
     storeReview
 }
