@@ -1,4 +1,5 @@
 const connection = require('../data/db.js');
+const slugify = require('slugify');
 
 function index(req, res) {
 
@@ -123,10 +124,15 @@ function store(req, res) {
     const imgName = req.file.filename;
 
     const sql = `
-    INSERT INTO movies (title, director, abstract, image)
-    VALUES (?, ?, ?, ?)`;
+    INSERT INTO movies (title, director, abstract, image, slug)
+    VALUES (?, ?, ?, ?, ?)`;
 
-    connection.query(sql, [title, director, abstract, imgName], (err, results) => {
+    const slug = slugify(title, {
+        lower: true,
+        trim: true,
+    });
+
+    connection.query(sql, [title, director, abstract, imgName, slug], (err, results) => {
         if (err) {
             return res.status(500).json({
                 errorMessage: err.sqlMessage
