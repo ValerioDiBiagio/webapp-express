@@ -52,7 +52,7 @@ function show(req, res) {
     LEFT JOIN
       reviews ON movies.id = reviews.movie_id
     WHERE
-      movies.id = ?
+      movies.slug = ?
     `
 
     connection.query(sql, [id], (err, results) => {
@@ -61,7 +61,7 @@ function show(req, res) {
                 errorMessage: err.sqlMessage
             })
         }
-        if (results.length === 0) {
+        if (results.length === 0 || results[0]?.id === null) {
             return res.status(404).json({
                 errorMessage: 'No records found',
                 id
@@ -77,7 +77,7 @@ function show(req, res) {
         }
         const sql = 'SELECT * FROM db_movies.reviews WHERE movie_id = ?';
 
-        connection.query(sql, [id], (err, results) => {
+        connection.query(sql, [currentResult.id], (err, results) => {
             if (err) {
                 console.log(err);
             }
